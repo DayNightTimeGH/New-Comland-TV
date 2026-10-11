@@ -74,6 +74,10 @@ footer{text-align:center;color:var(--mute);padding:30px 18px;font-size:.9rem}
 #pv::-internal-media-controls-download-button{display:none}
 #pv::-webkit-media-controls-enclosure{overflow:hidden}
 #pv::-webkit-media-controls-panel{width:calc(100% + 30px)}
+#pc{display:flex;align-items:center;gap:12px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:#000;color:#fff;font:600 .85rem Arial,sans-serif}
+#pc button{background:var(--acc);color:#111;border:0;border-radius:6px;padding:8px 14px;font:800 .85rem Arial,sans-serif;cursor:pointer;min-width:64px}
+#seek{flex:1;accent-color:var(--acc)}
+#tm{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -95,7 +99,8 @@ footer{text-align:center;color:var(--mute);padding:30px 18px;font-size:.9rem}
 <div id="rows"></div>
 <footer id="foot"></footer>
 
-<div id="player"><div id="ptitle"></div><button id="close">&times;</button><video id="pv" controls controlsList="nodownload noremoteplayback" disablePictureInPicture playsinline oncontextmenu="return false"></video></div>
+<div id="player"><div id="ptitle"></div><button id="close">&times;</button><video id="pv" controlsList="nodownload noremoteplayback" disablePictureInPicture playsinline oncontextmenu="return false"></video>
+<div id="pc"><button id="pp">Pause</button><input type="range" id="seek" min="0" max="1000" value="0"><span id="tm">0:00 / 0:00</span></div></div>
 
 <script>
 // videos
@@ -190,6 +195,17 @@ var NC_S={};window.__dis='';try{window.__dis=localStorage.getItem('nctv-dis')||'
   window.addEventListener('error',function(e){g('gate').classList.add('ready');g('gate-st').textContent=String(e.message||'Error').slice(0,140)});
   window.addEventListener('unhandledrejection',function(e){g('gate-st').textContent=String(e.reason&&e.reason.code||e.reason).slice(0,140)});
   g('g').onclick=function(){g('gate-st').textContent='Sign-in is not available here. Open the hosted address in Chrome.'};
+})();
+</script>
+<script>
+(function(){
+  var v=document.getElementById('pv'),pp=document.getElementById('pp'),sk=document.getElementById('seek'),tm=document.getElementById('tm');
+  function f(t){t=isFinite(t)?t:0;var m=Math.floor(t/60),s=Math.floor(t%60);return m+':'+(s<10?'0':'')+s}
+  function ui(){tm.textContent=f(v.currentTime)+' / '+f(v.duration);if(v.duration)sk.value=Math.round(v.currentTime/v.duration*1000);pp.textContent=v.paused?'Play':'Pause'}
+  ['timeupdate','loadedmetadata','play','pause','ended','emptied'].forEach(function(e){v.addEventListener(e,ui)});
+  function tg(){if(window.__blocked)return;if(v.paused)v.play().catch(function(){});else v.pause()}
+  pp.onclick=tg;v.onclick=tg;
+  sk.oninput=function(){if(v.duration)v.currentTime=sk.value/1000*v.duration};
 })();
 </script>
 <script crossorigin="anonymous" src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
