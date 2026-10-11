@@ -71,6 +71,9 @@ footer{text-align:center;color:var(--mute);padding:30px 18px;font-size:.9rem}
 #acct{display:none;justify-content:flex-end;align-items:center;gap:8px;padding:0 18px 6px;font:.85rem Arial,sans-serif;color:var(--mute)}
 #acct button{background:transparent;color:var(--ink);border:1px solid var(--mute);border-radius:14px;padding:3px 10px;font:700 .8rem Arial,sans-serif;cursor:pointer}
 #ctl{display:none;border-color:#b00020!important;color:#b00020!important}
+#pv::-internal-media-controls-download-button{display:none}
+#pv::-webkit-media-controls-enclosure{overflow:hidden}
+#pv::-webkit-media-controls-panel{width:calc(100% + 30px)}
 </style>
 </head>
 <body>
@@ -92,7 +95,7 @@ footer{text-align:center;color:var(--mute);padding:30px 18px;font-size:.9rem}
 <div id="rows"></div>
 <footer id="foot"></footer>
 
-<div id="player"><div id="ptitle"></div><button id="close">&times;</button><video id="pv" controls playsinline></video></div>
+<div id="player"><div id="ptitle"></div><button id="close">&times;</button><video id="pv" controls controlsList="nodownload noremoteplayback" disablePictureInPicture playsinline oncontextmenu="return false"></video></div>
 
 <script>
 // videos
